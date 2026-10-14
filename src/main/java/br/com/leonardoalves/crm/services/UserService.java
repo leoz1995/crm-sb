@@ -67,7 +67,7 @@ public class UserService {
 	private void updateData(User existsUser, User user) {
 		boolean passMatch = passwordEncoder.matches(user.getPassword(), existsUser.getPassword());
 		
-	    if (!passMatch) {
+	    if (passMatch) {
 	        throw new PasswordNotMatchException();
 	    }
 	    
