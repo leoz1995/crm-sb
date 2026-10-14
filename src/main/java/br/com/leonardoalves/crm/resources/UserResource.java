@@ -40,6 +40,13 @@ public class UserResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody UserCreateDTO userDTO, @PathVariable UUID id){	
+		User user = service.fromDTO(userDTO);
+		user.setId(id);
+		user = service.update(user);
+		return ResponseEntity.noContent().build(); //Retorna 204
+	}
 	//@RequestMapping(method=RequestMethod.GET)
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll(){

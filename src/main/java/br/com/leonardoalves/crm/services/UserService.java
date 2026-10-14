@@ -10,6 +10,7 @@ import br.com.leonardoalves.crm.domain.User;
 import br.com.leonardoalves.crm.dto.UserCreateDTO;
 import br.com.leonardoalves.crm.repository.UserRepository;
 import br.com.leonardoalves.crm.services.exception.ObjectNotFoundException;
+import br.com.leonardoalves.crm.services.exception.PasswordNotMatchException;
 
 @Service
 public class UserService {
@@ -54,6 +55,27 @@ public class UserService {
 		repo.deleteById(id);
 	}
 	
+	public User update(User user) {
+		User existsUser = repo.findById(user.getId())
+				.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado."));
+		
+		updateData(existsUser, user);
+		
+		return repo.save(existsUser);
+	}
+	
+	private void updateData(User existsUser, User user) {
+		boolean passMatch = passwordEncoder.matches(user.getPassword(), existsUser.getPassword());
+		
+	    if (!passMatch) {
+	        throw new PasswordNotMatchException();
+	    }
+	    
+		existsUser.setName(user.getName());
+		existsUser.setEmail(user.getEmail());
+		existsUser.setPassword(passwordEncoder.encode(user.getPassword()));
+	}
+
 	public User fromDTO(UserCreateDTO userCreateDTO) {
 		return new User(userCreateDTO.getName(), userCreateDTO.getEmail(), userCreateDTO.getPassword());
 	}
