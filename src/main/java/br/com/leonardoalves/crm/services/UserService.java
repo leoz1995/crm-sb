@@ -3,6 +3,7 @@ package br.com.leonardoalves.crm.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.leonardoalves.crm.domain.User;
@@ -14,9 +15,11 @@ import br.com.leonardoalves.crm.services.exception.ObjectNotFoundException;
 public class UserService {
 
 	private final UserRepository repo;
+	private final PasswordEncoder passwordEncoder;
 	
-	UserService(UserRepository uRepository){
+	UserService(UserRepository uRepository, PasswordEncoder passwordEncoder){
 		this.repo = uRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	public User create(User u) {	
@@ -28,6 +31,9 @@ public class UserService {
 					"Este e-mail já está em uso.");
 		}
 		u.setEmail(email);
+		
+		// Codificando a senha antes de salvar
+		u.setPassword(passwordEncoder.encode(u.getPassword()));
 		
 		return repo.save(u);
 	}
