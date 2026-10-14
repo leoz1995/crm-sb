@@ -48,6 +48,12 @@ public class UserResource {
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable UUID id){	
+		service.delete(id);
+		return ResponseEntity.noContent().build(); //Retorna 204
+	}
+	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<UserDTO> findById(@PathVariable UUID id){	
 		User user = service.findById(id);
