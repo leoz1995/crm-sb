@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import br.com.leonardoalves.crm.domain.employees.Employee;
 import br.com.leonardoalves.crm.domain.employees.EnterpriseEmployee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +13,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -33,7 +31,7 @@ public class Enterprise implements Serializable{
 	@Column(nullable=false, length=150)
 	private String name;
 	
-	@Column(nullable=false, unique=true, updatable = false, length=14)
+	@Column(nullable=false, unique=true, length=14)
 	private String cnpj;
 
 	@Column(unique=true, length=254)
@@ -66,9 +64,6 @@ public class Enterprise implements Serializable{
     
 	@Column(nullable = false)
 	private boolean active = true; // empresa ativa
-	
-	@ManyToMany(mappedBy="enterprises")
-	private Set<Employee> employees = new HashSet<>();
 	
 	@OneToMany(mappedBy="enterprise", fetch=FetchType.LAZY)
 	private Set<EnterpriseEmployee> employeeLinks = new HashSet<>();
@@ -162,9 +157,6 @@ public class Enterprise implements Serializable{
 	}
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-	public Set<Employee> getEmployees(){
-		return employees;
 	}
 	
 	@PrePersist

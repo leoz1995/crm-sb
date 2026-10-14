@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.hibernate.Hibernate;
+
 import br.com.leonardoalves.crm.domain.enums.GlobalRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,11 +46,7 @@ public class User implements Serializable{
 	public UUID getId() {
 		return id;
 	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -86,12 +84,10 @@ public class User implements Serializable{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj))
 			return false;
 		User other = (User) obj;
-		return Objects.equals(id, other.id);
+		return id != null && id.equals(other.id);
 	}
 	
 }
