@@ -1,7 +1,6 @@
 package br.com.leonardoalves.crm.domain;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 import org.hibernate.Hibernate;
@@ -33,6 +32,8 @@ public class User implements Serializable{
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false, length=30)
 	private GlobalRole globalRole = GlobalRole.USER;
+	
+	private boolean activeUser = true;
 
 	public User() {}
 
@@ -43,6 +44,10 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	public void setId(UUID id) {
+		this.id = id;
+	}
+	
 	public UUID getId() {
 		return id;
 	}
@@ -75,9 +80,17 @@ public class User implements Serializable{
 		return globalRole;
 	}
 	
+	public boolean getActiveUser() {
+		return activeUser;
+	}
+	
+	public void setActiveUser(boolean activeUser) {
+		this.activeUser = activeUser;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Hibernate.getClass(this).hashCode();
 	}
 
 	@Override

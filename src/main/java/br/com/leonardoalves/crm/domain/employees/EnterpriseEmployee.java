@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="enterprise_employee")
@@ -30,9 +31,11 @@ public class EnterpriseEmployee {
 	@JoinColumn(name="employee_id", nullable=false)
 	private Employee employee;
 	
+	@NotBlank //sem texto nullo
 	@Column(nullable=false, length=100)
 	private String jobTitle;
 	
+	@Column(nullable=false)
 	private LocalDate admissionDate;
 	
 	@Column(nullable=false)

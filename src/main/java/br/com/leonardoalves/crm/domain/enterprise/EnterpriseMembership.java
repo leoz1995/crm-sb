@@ -18,12 +18,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="enterprise_membership", uniqueConstraints=@UniqueConstraint(columnNames= {"user_id", "enterprise_id"}))
+@Table(name="enterprise_membership", 
+uniqueConstraints= {@UniqueConstraint(name="uk_enterprise_membership_user_enterprise", 
+columnNames= {"user_id", "enterprise_id"})})
 public class EnterpriseMembership {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.UUID)
-	private UUID ui;
+	private UUID id;
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn(name="user_id", nullable=false)
@@ -43,5 +45,21 @@ public class EnterpriseMembership {
 		this.user = user;
 		this.enterprise = enterprise;
 		this.role = role;
+	}
+	
+	public UUID getId() {
+	    return id;
+	}
+
+	public User getUser() {
+	    return user;
+	}
+
+	public Enterprise getEnterprise() {
+	    return enterprise;
+	}
+
+	public EnterpriseRole getRole() {
+	    return role;
 	}
 }
