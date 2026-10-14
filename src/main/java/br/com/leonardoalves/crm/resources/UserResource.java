@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.leonardoalves.crm.domain.User;
+import br.com.leonardoalves.crm.dto.UserDTO;
 import br.com.leonardoalves.crm.services.UserService;
 
 @RestController
@@ -33,11 +34,13 @@ public class UserResource {
 		
 		return ResponseEntity.created(uri).body(u);
 	}
+	
 	//@RequestMapping(method=RequestMethod.GET)
 	@GetMapping
-	public ResponseEntity<List<User>> findAll(){
+	public ResponseEntity<List<UserDTO>> findAll(){
 		List<User> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		List<UserDTO> listDTO = list.stream().map(u -> new UserDTO(u)).toList();
+		return ResponseEntity.ok().body(listDTO);
 	}
 	
 	

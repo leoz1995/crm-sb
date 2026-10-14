@@ -20,7 +20,7 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.UUID) //Auto implementação
 	private UUID id; //User identification
-		private String name; //User name
+	private String name; //User name
 	@Column(nullable=false, unique=true, length=254) // Não pode ser nullo, é unico e máximo de 254 caracteres
 	private String email; //User mail (unique)
 	private String password; //user password
