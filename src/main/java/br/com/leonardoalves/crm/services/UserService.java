@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.leonardoalves.crm.domain.User;
 import br.com.leonardoalves.crm.dto.UserCreateDTO;
-import br.com.leonardoalves.crm.repository.UserRepository;
+import br.com.leonardoalves.crm.repositories.UserRepository;
 import br.com.leonardoalves.crm.services.exception.ObjectNotFoundException;
 import br.com.leonardoalves.crm.services.exception.PasswordNotMatchException;
 

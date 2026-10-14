@@ -1,4 +1,4 @@
-package br.com.leonardoalves.crm.repository;
+package br.com.leonardoalves.crm.repositories;
 
 import java.util.UUID;
 

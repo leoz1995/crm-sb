@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import br.com.leonardoalves.crm.domain.enums.GlobalRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +27,10 @@ public class User implements Serializable{
 	@Column(nullable=false, unique=true, length=254) // Não pode ser nullo, é unico e máximo de 254 caracteres
 	private String email; //User mail (unique)
 	private String password; //user password
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable=false, length=30)
+	private GlobalRole globalRole = GlobalRole.USER;
 
 	public User() {}
 
@@ -66,6 +73,10 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	public GlobalRole getGlobalRole() {
+		return globalRole;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
