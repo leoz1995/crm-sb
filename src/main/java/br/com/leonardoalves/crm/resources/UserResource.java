@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.leonardoalves.crm.domain.User;
+import br.com.leonardoalves.crm.dto.UserCreateDTO;
 import br.com.leonardoalves.crm.dto.UserDTO;
 import br.com.leonardoalves.crm.services.UserService;
 
@@ -29,15 +30,16 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> addUser(@RequestBody User u){
-		u = service.create(u);
+	public ResponseEntity<Void> create(@RequestBody UserCreateDTO userDTO){	
+		User user = service.fromDTO(userDTO);
+		user = service.create(user);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(u.getId()).toUri();
+				.path("/{id}").buildAndExpand(user.getId()).toUri();
 		
-		return ResponseEntity.created(uri).body(u);
+		return ResponseEntity.created(uri).build();
 	}
-	
+
 	//@RequestMapping(method=RequestMethod.GET)
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll(){
@@ -51,5 +53,4 @@ public class UserResource {
 		User user = service.findById(id);
 		return ResponseEntity.ok().body(new UserDTO(user));
 	}
-	
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import br.com.leonardoalves.crm.domain.User;
+import br.com.leonardoalves.crm.dto.UserCreateDTO;
 import br.com.leonardoalves.crm.repository.UserRepository;
 import br.com.leonardoalves.crm.services.exception.ObjectNotFoundException;
 
@@ -19,10 +20,15 @@ public class UserService {
 	}
 	
 	public User create(User u) {	
-		if(repo.existsByEmail(u.getEmail())) {
+		
+		String email = u.getEmail().trim().toLowerCase();
+		
+		if(repo.existsByEmail(email)) {
 			throw new IllegalArgumentException(
 					"Este e-mail já está em uso.");
 		}
+		u.setEmail(email);
+		
 		return repo.save(u);
 	}
 	
@@ -35,5 +41,9 @@ public class UserService {
 				.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado."));
 		
 		return user;
+	}
+	
+	public User fromDTO(UserCreateDTO userCreateDTO) {
+		return new User(userCreateDTO.getName(), userCreateDTO.getEmail(), userCreateDTO.getPassword());
 	}
 }
