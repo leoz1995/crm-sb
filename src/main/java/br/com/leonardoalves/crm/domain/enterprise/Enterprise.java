@@ -61,6 +61,9 @@ public class Enterprise implements Serializable{
     @Column(nullable = false, updatable = false)
 	private Instant createdAt; // Data do cadastro
 	private Instant updatedAt; // Último update
+	
+	@Column(name="deleted_at")
+	private Instant deletedAt;
     
 	@Column(nullable = false)
 	private boolean active = true; // empresa ativa
@@ -154,6 +157,18 @@ public class Enterprise implements Serializable{
 	}
 	public Instant getUpdatedAt() {
 		return updatedAt;
+	}
+	public Instant getDeletedAt() {
+		return deletedAt;
+	}
+	public boolean isDeleted() {
+		return deletedAt != null;
+	}
+	public void markAsDeleted() {
+		this.deletedAt = Instant.now();
+	}
+	public void restore() {
+		this.deletedAt = null;
 	}
 	public boolean isActive() {
 		return active;

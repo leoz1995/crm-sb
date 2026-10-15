@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,9 +50,10 @@ public class EnterpriseResource {
 		return ResponseEntity.ok(response);
 	}
 	
-	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-	public ResponseEntity<Void> delete(@PathVariable UUID id){	
-		service.delete(id);
+	@DeleteMapping(value="/{id}")
+	public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication){	
+		service.requestDeletion(id, authentication.getName());
+		
 		return ResponseEntity.noContent().build(); //Retorna 204
 	}
 	
@@ -66,5 +68,12 @@ public class EnterpriseResource {
 	    return ResponseEntity.ok(
 	        new EnterpriseDTO(enterprise)
 	    );
+	}
+	
+	@PreAuthorize("hasRole('PLATAFORM_ADMIN')")
+	@PostMapping("/{id}/restore")
+	public ResponseEntity<Void> restore(@PathVariable UUID id){
+		service.restoreDeletedEnterprise(id);
+		return ResponseEntity.noContent().build();
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.leonardoalves.crm.repositories;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +20,7 @@ public interface EnterpriseRepository  extends JpaRepository<Enterprise, UUID>{
 		    FROM Enterprise e
 		    JOIN e.membership m
 		    WHERE LOWER(m.user.email) = LOWER(:email)
+		    AND e.deletedAt IS NULL
 		    """)
 		List<Enterprise> findAllAccessibleByUserEmail(
 		        @Param("email") String email);
@@ -29,10 +31,13 @@ public interface EnterpriseRepository  extends JpaRepository<Enterprise, UUID>{
             JOIN e.membership m
             WHERE e.id = :id
               AND LOWER(m.user.email) = LOWER(:email)
+                    AND e.deletedAt IS NULL
             """)
         Optional<Enterprise> findAccessibleByIdAndUserEmail(
                 @Param("id") UUID id,
                 @Param("email") String email);
     
 	boolean existsByEmail(String email);
+	
+	List<Enterprise> findAllByDeletedAtBefore(Instant cutoff);
 }
