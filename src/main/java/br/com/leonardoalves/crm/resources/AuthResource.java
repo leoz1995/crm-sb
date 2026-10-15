@@ -24,8 +24,6 @@ public class AuthResource {
 	public ResponseEntity<AuthResponseDTO> login(
 	        @RequestBody AuthLoginDTO dto) {
 
-	    System.out.println(">>> ENTROU NO AuthResource.login");
-
 	    AuthResponseDTO response = service.login(dto);
 	    return ResponseEntity.ok(response);
 	}

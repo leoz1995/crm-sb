@@ -37,13 +37,10 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-					    // O AuthorizationFilter tambem roda no dispatch de ERRO: sem liberar
-					    // /error, qualquer excecao da API volta como 401 de corpo vazio e
-					    // esconde a causa real.
 					    .requestMatchers("/error").permitAll()
 					    .requestMatchers(HttpMethod.POST,
-					        "/api/v1/users",
-					        "/api/v1/auth/login"
+					            "/api/v1/users",
+					            "/api/v1/auth/login"
 					    ).permitAll()
 					    .anyRequest().authenticated()
 					)

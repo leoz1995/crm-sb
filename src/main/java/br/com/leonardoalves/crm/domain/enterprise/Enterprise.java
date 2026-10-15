@@ -1,7 +1,7 @@
 package br.com.leonardoalves.crm.domain.enterprise;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -59,8 +59,8 @@ public class Enterprise implements Serializable{
 	private String state; // estado
 	
     @Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt; // Data do cadastro
-	private LocalDateTime updatedAt; // Último update
+	private Instant createdAt; // Data do cadastro
+	private Instant updatedAt; // Último update
     
 	@Column(nullable = false)
 	private boolean active = true; // empresa ativa
@@ -94,6 +94,9 @@ public class Enterprise implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 	public String getCnpj() {
 		return cnpj;
@@ -146,10 +149,10 @@ public class Enterprise implements Serializable{
 	public void setState(String state) {
 		this.state = state;
 	}
-	public LocalDateTime getCreatedAt() {
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
-	public LocalDateTime getUpdatedAt() {
+	public Instant getUpdatedAt() {
 		return updatedAt;
 	}
 	public boolean isActive() {
@@ -158,17 +161,22 @@ public class Enterprise implements Serializable{
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+	public Set<EnterpriseEmployee> getEmployeeLinks() {
+		return employeeLinks;
+	}
+	public Set<EnterpriseMembership> getMembership() {
+		return membership;
+	}
 	@PrePersist
 	public void prePersist() {
-		LocalDateTime now = LocalDateTime.now();
+		Instant now = Instant.now();
 		createdAt = now;
 		updatedAt = now;
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
-		updatedAt = LocalDateTime.now();
+		updatedAt = Instant.now();
 	}
 	@Override
 	public int hashCode() {
