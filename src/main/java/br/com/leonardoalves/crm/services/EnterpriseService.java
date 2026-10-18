@@ -13,6 +13,7 @@ import br.com.leonardoalves.crm.domain.User;
 import br.com.leonardoalves.crm.domain.enterprise.Enterprise;
 import br.com.leonardoalves.crm.domain.enterprise.EnterpriseMembership;
 import br.com.leonardoalves.crm.domain.enums.EnterpriseRole;
+import br.com.leonardoalves.crm.domain.enums.GlobalRole;
 import br.com.leonardoalves.crm.dto.EnterpriseCreateDTO;
 import br.com.leonardoalves.crm.repositories.EnterpriseEmployeeRepository;
 import br.com.leonardoalves.crm.repositories.EnterpriseMembershipRepository;
@@ -66,14 +67,14 @@ public class EnterpriseService {
 		enterprise.setState(normalizeOptional(enterprise.getState())); // caixa alta.
 		
 		Enterprise savedEnterprise = repository.save(enterprise);
-		EnterpriseMembership membership = new EnterpriseMembership(user, savedEnterprise, EnterpriseRole.OWNER);
+		EnterpriseMembership membership = new EnterpriseMembership(user, savedEnterprise, EnterpriseRole.ADMIN);
 		
 		membershipRepository.save(membership);
 		
 		return savedEnterprise;
 	}
 	
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<Enterprise> findALlByAuthenticatedUser(String authenticatedEmail){
 		return repository.findAllAccessibleByUserEmail(normalizeEmail(authenticatedEmail));
 	}
@@ -111,10 +112,11 @@ public class EnterpriseService {
 		
 		enterprise.restore();
 	}
-	private String normalizeEmail(String email) {
-	    return email == null ? null : email.trim().toLowerCase(java.util.Locale.ROOT);
+	private static String normalizeEmail(String email) {
+	    return email == null ? null : email.trim().toLowerCase();
 	}
 	
+	@Transactional(readOnly=true)
 	public Enterprise findById(UUID uuid) {
 		Enterprise enterprise = repository.findById(uuid)
 				.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado."));
@@ -152,6 +154,7 @@ public class EnterpriseService {
 		return expiredEnterprises.size();
 	}
 	
+	@Transactional
 	public Enterprise fromDTO(EnterpriseCreateDTO enterpriseDTO) {
 		return new Enterprise(enterpriseDTO.getName(), enterpriseDTO.getCnpj() ,enterpriseDTO.getEmail(),
 				enterpriseDTO.getPhone(), enterpriseDTO.getZipCode(), enterpriseDTO.getStreet(), enterpriseDTO.getComplement(),
@@ -159,7 +162,7 @@ public class EnterpriseService {
 	}
 	
 	private void checkOwner(UUID id, String authenticatedEmail) {
-		boolean isOwner = membershipRepository.existsByEnterpriseAndUserAndRole(id, authenticatedEmail, EnterpriseRole.OWNER);
+		boolean isOwner = membershipRepository.existsByEnterpriseAndUserAndRole(id, authenticatedEmail, GlobalRole.BUSINESSPERSON);
 		
 		if(!isOwner) {
 			throw new AccessDeniedException(

@@ -1,10 +1,12 @@
 package br.com.leonardoalves.crm.domain.enterprise;
 
-import java.io.Serializable;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.hibernate.Hibernate;
 
 import br.com.leonardoalves.crm.domain.employees.EnterpriseEmployee;
 import jakarta.persistence.Column;
@@ -17,12 +19,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name="enterprises")
-public class Enterprise implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class Enterprise{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.UUID)
@@ -74,7 +75,10 @@ public class Enterprise implements Serializable{
 	@OneToMany(mappedBy="enterprise", fetch=FetchType.LAZY)
 	private Set<EnterpriseMembership> membership = new HashSet<>();
 	
-	public Enterprise() {}
+	@Version
+	private Long version;
+	
+	protected Enterprise() {}
 	public Enterprise(String name, String cnpj, String email, String phone, String zipCode, String street,
 			String complement, String neighborhood, String city, String state) {
 		super();
@@ -180,28 +184,29 @@ public class Enterprise implements Serializable{
 		return employeeLinks;
 	}
 	public Set<EnterpriseMembership> getMembership() {
-		return membership;
+		return Collections.unmodifiableSet(membership); //expor só leitura.
 	}
 	@PrePersist
 	public void prePersist() {
-		Instant now = Instant.now();
-		createdAt = now;
-		updatedAt = now;
+		createdAt = Instant.now();
+		updatedAt = createdAt;
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
 		updatedAt = Instant.now();
 	}
+
 	@Override
 	public int hashCode() {
-		return getClass().hashCode();
+		return Hibernate.getClass(this).hashCode();
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null || getClass() != obj.getClass())
+		if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj))
 			return false;
 
 		Enterprise other = (Enterprise) obj;

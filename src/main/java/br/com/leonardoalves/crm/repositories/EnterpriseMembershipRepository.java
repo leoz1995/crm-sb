@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import br.com.leonardoalves.crm.domain.enterprise.EnterpriseMembership;
-import br.com.leonardoalves.crm.domain.enums.EnterpriseRole;
+import br.com.leonardoalves.crm.domain.enums.GlobalRole;
 
 public interface EnterpriseMembershipRepository extends JpaRepository<EnterpriseMembership, UUID>{
 
@@ -20,7 +20,7 @@ public interface EnterpriseMembershipRepository extends JpaRepository<Enterprise
 			AND m.role = :role
 			""")
 	boolean existsByEnterpriseAndUserAndRole(@Param("enterpriseId") UUID enterpriseId, 
-			@Param("email") String email, @Param("role") EnterpriseRole role);
+			@Param("email") String email, @Param("role") GlobalRole role);
 	
 	@Modifying
 	@Query("""

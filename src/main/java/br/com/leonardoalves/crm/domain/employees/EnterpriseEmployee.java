@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -40,6 +41,9 @@ public class EnterpriseEmployee {
 	
 	@Column(nullable=false)
 	private boolean active = true;
+	
+	@Version
+	private Long version;
 	
 	protected EnterpriseEmployee() {}
 	

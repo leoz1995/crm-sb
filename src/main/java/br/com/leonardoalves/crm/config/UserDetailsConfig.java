@@ -23,7 +23,7 @@ public class UserDetailsConfig {
 						.withUsername(u.getEmail())
 						.password(u.getPassword())
 						.authorities("ROLE_" + u.getGlobalRole().name())
-						.disabled(!u.getActiveUser())
+						.disabled(!u.isActiveUser())
 						.build())
 				.orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado: " + email));
 	}

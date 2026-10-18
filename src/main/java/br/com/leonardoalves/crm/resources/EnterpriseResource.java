@@ -70,7 +70,7 @@ public class EnterpriseResource {
 	    );
 	}
 	
-	@PreAuthorize("hasRole('PLATAFORM_ADMIN')")
+	@PreAuthorize("hasRole('PLATFORM_OWNER')")
 	@PostMapping("/{id}/restore")
 	public ResponseEntity<Void> restore(@PathVariable UUID id){
 		service.restoreDeletedEnterprise(id);

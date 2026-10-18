@@ -37,7 +37,7 @@ public class EnterpriseMembership {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false, length=30)
-	private EnterpriseRole role = EnterpriseRole.MEMBER;
+	private EnterpriseRole role;
 	
 	protected EnterpriseMembership() {}
 	

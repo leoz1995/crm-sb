@@ -1,10 +1,6 @@
 package br.com.leonardoalves.crm.resources.exceptions;
 
-import java.io.Serializable;
-
-public class StandardError implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class StandardError {
 	
 	private Long timestamp;
 	private Integer status;
